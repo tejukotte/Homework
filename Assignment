@@ -1,0 +1,24 @@
+#Homework Assignment 1 
+
+import pandas as pd
+import numpy as np
+
+def cleandata():
+    #Load the raw data using the ExcelFile Object 
+    data = pd.ExcelFile('RawData.xlsx') 
+
+    
+    df = data.parse()
+    #print(df) 
+    
+    
+    transposed_df = df.transpose()
+    
+    #print(transposed_df) 
+
+            
+    writer = pd.ExcelWriter('reshaped_data.xlsx') 
+    transposed_df.to_excel(writer, 'Sheet 1')
+    writer.save()
+    
+    return 
