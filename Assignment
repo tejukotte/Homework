@@ -1,3 +1,4 @@
+
 #Homework Assignment 1 
 
 import pandas as pd
@@ -7,18 +8,44 @@ def cleandata():
     #Load the raw data using the ExcelFile Object 
     data = pd.ExcelFile('RawData.xlsx') 
 
-    
+    #Parse data twice, once for divorce and once for marriage
     df = data.parse()
-    #print(df) 
+    df2 = data.parse()
+    
+    #create a list of the columns
+    cols = list(df.columns) 
+    
+    #create two new lists, one for marriage, one for divorce, this will be used later to drop columns
+    marriage_cols = []
+    divorce_cols = [] 
+    
+    #add column names to appropriate lists
+    for column in cols: 
+        if "Marriage" in str(column): 
+            marriage_cols.append(column) 
+        if "Divorce" in str(column): 
+            divorce_cols.append(column)     
+     
+    #print(marriage_cols) 
+    
+    #from dataframe 1, drop marriage rates (divorce only) 
+    for column in marriage_cols: 
+        del df[column] 
+    
+    #from dataframe 2, drop divorce rates (marriage only) 
+    for column in divorce_cols: 
+        del df2[column]    
     
     
+    #transpose both data frames 
     transposed_df = df.transpose()
+    transposed_df2 = df2.transpose()
     
-    #print(transposed_df) 
-
-            
+    #write to new excel file
     writer = pd.ExcelWriter('reshaped_data.xlsx') 
-    transposed_df.to_excel(writer, 'Sheet 1')
-    writer.save()
-    
+    transposed_df.to_excel(writer, "Divorce")
+    transposed_df2.to_excel(writer, "Marriage")
+    writer.save()          
+        
+
     return 
